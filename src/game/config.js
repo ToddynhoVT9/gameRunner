@@ -14,6 +14,7 @@ export const GAME_CONFIG = {
   scorePerSecond: 10,
   floatingMinY: 118,
   floatingMaxY: 155,
+  floatingBottomLimitPlayerHeightRatio: 0.7,
   longJumpDuration: 0.28,
   longJumpCooldown: 1.0,
   longJumpForwardSpeed: 320,
@@ -33,6 +34,7 @@ export const GAME_CONFIG = {
     x: 90,
     width: 42,
     height: 48,
+    crouchHeightRatio: 0.6,
     color: '#1f2937',
   },
   obstacleStyles: {

@@ -37,6 +37,12 @@ function GameCanvas({ playerName, runSignal, onScoreChange, onGameOver, onStateC
         return
       }
 
+      if (event.code === 'ArrowDown') {
+        event.preventDefault()
+        engine.startCrouch()
+        return
+      }
+
       if (event.code === 'Space' || event.code === 'ArrowUp') {
         event.preventDefault()
         engine.jump()
@@ -49,10 +55,29 @@ function GameCanvas({ playerName, runSignal, onScoreChange, onGameOver, onStateC
       }
     }
 
+    const handleKeyUp = (event) => {
+      if (isTypingTarget(event.target)) {
+        return
+      }
+
+      if (event.code === 'ArrowDown') {
+        event.preventDefault()
+        engine.endCrouch()
+      }
+    }
+
+    const handleWindowBlur = () => {
+      engine.endCrouch()
+    }
+
     window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    window.addEventListener('blur', handleWindowBlur)
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+      window.removeEventListener('blur', handleWindowBlur)
       engine.destroy()
       engineRef.current = null
     }

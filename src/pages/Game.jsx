@@ -72,7 +72,7 @@ function Game() {
     <main className="game-page">
       <header className="game-header">
         <h1>Dino React Runner</h1>
-        <p>Space/ArrowUp para pular e E, D ou ArrowRight para long jump no ar.</p>
+        <p>Space/ArrowUp pula, ArrowDown abaixa e E, D ou ArrowRight ativa long jump no ar.</p>
       </header>
 
       <section className="pre-game" aria-label="Pre game settings">

@@ -133,7 +133,30 @@ export class GameEngine {
       return
     }
 
+    if (this.player.isCrouching) {
+      this.player.isCrouching = false
+      this.updatePlayerPosture()
+    }
+
     tryJump(this.player, GAME_CONFIG.jumpStrength)
+  }
+
+  startCrouch() {
+    if (this.state !== 'running') {
+      return
+    }
+
+    this.player.isCrouching = true
+    this.updatePlayerPosture()
+  }
+
+  endCrouch() {
+    if (this.state !== 'running') {
+      return
+    }
+
+    this.player.isCrouching = false
+    this.updatePlayerPosture()
   }
 
   longJump() {
@@ -180,6 +203,7 @@ export class GameEngine {
 
     applyGravity(this.player, GAME_CONFIG.gravity, dt)
     resolveGroundCollision(this.player, GAME_CONFIG.groundY)
+    this.updatePlayerPosture()
 
     if (this.player.onGround && this.player.isLongJumping) {
       this.player.isLongJumping = false
@@ -194,6 +218,22 @@ export class GameEngine {
     if (this.hasCollision()) {
       this.finishGame()
     }
+  }
+
+  updatePlayerPosture() {
+    const targetHeight =
+      this.player.isCrouching && this.player.onGround ? this.player.crouchHeight : this.player.standHeight
+
+    if (this.player.height === targetHeight) {
+      if (this.player.onGround) {
+        this.player.y = GAME_CONFIG.groundY - targetHeight
+      }
+      return
+    }
+
+    const feetY = this.player.onGround ? GAME_CONFIG.groundY : this.player.y + this.player.height
+    this.player.height = targetHeight
+    this.player.y = feetY - targetHeight
   }
 
   updatePlayerHorizontal(dt) {

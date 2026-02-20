@@ -48,6 +48,7 @@ src/
 ## Controles
 
 - `Space` ou `ArrowUp`: pular
+- `ArrowDown`: abaixar (altura do player em 60%)
 - `E`, `D` ou `ArrowRight` no ar: long jump (mais distancia, nao mais altura)
 - Clique/toque no canvas: pular
 
