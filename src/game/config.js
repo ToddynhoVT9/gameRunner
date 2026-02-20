@@ -1,0 +1,31 @@
+export const GAME_CONFIG = {
+  canvasWidth: 900,
+  canvasHeight: 280,
+  groundY: 220,
+  gravity: 1900,
+  jumpStrength: 680,
+  gameSpeed: 300,
+  speedIncreasePerSecond: 8,
+  spawnIntervalMin: 0.95,
+  spawnIntervalMax: 1.75,
+  scorePerSecond: 10,
+  maxDeltaTime: 0.05,
+  player: {
+    x: 90,
+    width: 42,
+    height: 48,
+    color: '#1f2937',
+  },
+  obstacle: {
+    minWidth: 24,
+    maxWidth: 42,
+    minHeight: 32,
+    maxHeight: 56,
+    color: '#0f766e',
+  },
+  palette: {
+    background: '#f4f1e8',
+    ground: '#7c5f3f',
+    accent: '#c2410c',
+  },
+}
