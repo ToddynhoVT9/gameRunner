@@ -14,9 +14,11 @@ export const GAME_CONFIG = {
   scorePerSecond: 10,
   floatingMinY: 118,
   floatingMaxY: 155,
-  longJumpDuration: 0.9,
-  longJumpWorldSlowdown: 0.9,
+  longJumpDuration: 0.28,
   longJumpCooldown: 1.0,
+  longJumpForwardSpeed: 320,
+  longJumpMaxForwardOffset: 92,
+  longJumpReturnSpeed: 260,
   spawnWeights: {
     groundShort: 0.55,
     groundLong: 0.25,

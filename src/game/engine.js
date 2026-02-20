@@ -186,14 +186,30 @@ export class GameEngine {
       this.longJumpTimeLeft = 0
     }
 
-    const worldSpeedMultiplier = this.longJumpTimeLeft > 0 ? 1 - GAME_CONFIG.longJumpWorldSlowdown : 1
-    const worldSpeed = this.speed * worldSpeedMultiplier
+    this.updatePlayerHorizontal(dt)
 
-    this.updateObstacles(dt, worldSpeed)
+    this.updateObstacles(dt)
     this.updateScore(dt)
 
     if (this.hasCollision()) {
       this.finishGame()
+    }
+  }
+
+  updatePlayerHorizontal(dt) {
+    const baseX = this.player.baseX
+    const maxForwardX = Math.min(
+      baseX + GAME_CONFIG.longJumpMaxForwardOffset,
+      GAME_CONFIG.canvasWidth - this.player.width - 16,
+    )
+
+    if (this.longJumpTimeLeft > 0 && !this.player.onGround) {
+      this.player.x = Math.min(maxForwardX, this.player.x + GAME_CONFIG.longJumpForwardSpeed * dt)
+      return
+    }
+
+    if (this.player.onGround && this.player.x > baseX) {
+      this.player.x = Math.max(baseX, this.player.x - GAME_CONFIG.longJumpReturnSpeed * dt)
     }
   }
 
@@ -253,7 +269,7 @@ export class GameEngine {
     return createGroundShort()
   }
 
-  updateObstacles(dt, worldSpeed) {
+  updateObstacles(dt) {
     this.spawnTimer -= dt
 
     Object.keys(this.typeCooldowns).forEach((type) => {
@@ -272,7 +288,7 @@ export class GameEngine {
     this.obstacles = this.obstacles
       .map((obstacle) => ({
         ...obstacle,
-        x: obstacle.x - worldSpeed * (obstacle.speedMultiplier ?? 1) * dt,
+        x: obstacle.x - this.speed * (obstacle.speedMultiplier ?? 1) * dt,
       }))
       .filter((obstacle) => obstacle.x + obstacle.width >= -2)
   }

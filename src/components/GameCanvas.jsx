@@ -1,6 +1,15 @@
 import { useEffect, useRef } from 'react'
 import { GameEngine } from '../game/engine.js'
 
+function isTypingTarget(target) {
+  if (!(target instanceof HTMLElement)) {
+    return false
+  }
+
+  const tagName = target.tagName
+  return target.isContentEditable || tagName === 'INPUT' || tagName === 'TEXTAREA' || tagName === 'SELECT'
+}
+
 function GameCanvas({ playerName, runSignal, onScoreChange, onGameOver, onStateChange }) {
   const canvasRef = useRef(null)
   const engineRef = useRef(null)
@@ -24,6 +33,10 @@ function GameCanvas({ playerName, runSignal, onScoreChange, onGameOver, onStateC
     engineRef.current = engine
 
     const handleKeyDown = (event) => {
+      if (isTypingTarget(event.target)) {
+        return
+      }
+
       if (event.code === 'Space' || event.code === 'ArrowUp') {
         event.preventDefault()
         engine.jump()

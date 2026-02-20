@@ -7,6 +7,7 @@ function randomBetween(min, max) {
 export function createPlayer() {
   return {
     x: GAME_CONFIG.player.x,
+    baseX: GAME_CONFIG.player.x,
     y: GAME_CONFIG.groundY - GAME_CONFIG.player.height,
     width: GAME_CONFIG.player.width,
     height: GAME_CONFIG.player.height,
