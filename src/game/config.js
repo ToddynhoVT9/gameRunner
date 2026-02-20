@@ -17,7 +17,7 @@ export const GAME_CONFIG = {
   floatingBottomLimitPlayerHeightRatio: 0.7,
   longJumpDuration: 0.28,
   longJumpCooldown: 1.0,
-  longJumpForwardSpeed: 320,
+  longJumpForwardSpeed: 220,
   longJumpMaxForwardOffset: 92,
   longJumpReturnSpeed: 260,
   spawnWeights: {
