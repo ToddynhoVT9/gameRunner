@@ -1,78 +1,90 @@
-import { useCallback, useState } from 'react'
-import GameCanvas from '../components/GameCanvas.jsx'
+import { useCallback, useState } from "react";
+import GameCanvas from "../components/GameCanvas.jsx";
 import {
   addEntry,
   isValidPlayerName,
   loadScoreboard,
   sanitizeName,
-} from '../game/scoreboard.js'
+} from "../game/scoreboard.js";
 
 function formatDate(value) {
-  const date = new Date(value)
+  const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return '--'
+    return "--";
   }
 
-  return date.toLocaleDateString('pt-BR')
+  return date.toLocaleDateString("pt-BR");
 }
 
 function Game() {
-  const [playerName, setPlayerName] = useState('')
-  const [status, setStatus] = useState('idle')
-  const [score, setScore] = useState(0)
-  const [runSignal, setRunSignal] = useState(0)
-  const [scoreboard, setScoreboard] = useState(() => loadScoreboard())
+  const [playerName, setPlayerName] = useState("");
+  const [status, setStatus] = useState("idle");
+  const [score, setScore] = useState(0);
+  const [runSignal, setRunSignal] = useState(0);
+  const [scoreboard, setScoreboard] = useState(() => loadScoreboard());
 
-  const safePlayerName = sanitizeName(playerName)
-  const isReady = isValidPlayerName(safePlayerName)
-  const globalHighScore = scoreboard.entries.length > 0 ? scoreboard.entries[0].score : 0
+  const safePlayerName = sanitizeName(playerName);
+  const isReady = isValidPlayerName(safePlayerName);
+  const globalHighScore =
+    scoreboard.entries.length > 0 ? scoreboard.entries[0].score : 0;
 
   const handleScoreChange = useCallback((nextScore) => {
-    setScore(nextScore)
-  }, [])
+    setScore(nextScore);
+  }, []);
 
-  const handleGameOver = useCallback((finalScore, nextScoreboard) => {
-    setStatus('gameOver')
-    setScore(finalScore)
+  const handleGameOver = useCallback(
+    (finalScore, nextScoreboard) => {
+      setStatus("gameOver");
+      setScore(finalScore);
 
-    if (nextScoreboard) {
-      setScoreboard(nextScoreboard)
-      return
-    }
+      if (nextScoreboard) {
+        setScoreboard(nextScoreboard);
+        return;
+      }
 
-    if (isValidPlayerName(safePlayerName)) {
-      setScoreboard(addEntry({ name: safePlayerName, score: finalScore }))
-      return
-    }
+      if (isValidPlayerName(safePlayerName)) {
+        setScoreboard(addEntry({ name: safePlayerName, score: finalScore }));
+        return;
+      }
 
-    setScoreboard(loadScoreboard())
-  }, [safePlayerName])
+      setScoreboard(loadScoreboard());
+    },
+    [safePlayerName],
+  );
 
   const handleStateChange = useCallback((nextState) => {
-    setStatus(nextState)
-  }, [])
+    setStatus(nextState);
+  }, []);
 
   const handleNameChange = (event) => {
-    setPlayerName(sanitizeName(event.target.value))
-  }
+    setPlayerName(sanitizeName(event.target.value));
+  };
 
   const handleStart = () => {
     if (!isReady) {
-      return
+      return;
     }
 
-    setScore(0)
-    setStatus('running')
-    setRunSignal((currentSignal) => currentSignal + 1)
-  }
+    setScore(0);
+    setStatus("running");
+    setRunSignal((currentSignal) => currentSignal + 1);
+  };
 
-  const actionLabel = status === 'idle' ? 'Start' : status === 'gameOver' ? 'Restart' : 'Running...'
+  const actionLabel =
+    status === "idle"
+      ? "Start"
+      : status === "gameOver"
+        ? "Restart"
+        : "Running...";
 
   return (
     <main className="game-page">
       <header className="game-header">
-        <h1>Dino React Runner</h1>
-        <p>Space/ArrowUp pula, ArrowDown abaixa e E, D ou ArrowRight ativa long jump no ar.</p>
+        <h1>Runner</h1>
+        <p>
+          Ceta para cima cocê pula || Ceta para baixo você agacha || Ceta para a
+          direita ativa o dash no ar.
+        </p>
       </header>
 
       <section className="pre-game" aria-label="Pre game settings">
@@ -86,10 +98,10 @@ function Game() {
           maxLength={20}
           autoComplete="off"
         />
-        <small className={isReady ? 'ok' : 'error'}>
+        <small className={isReady ? "ok" : "error"}>
           {isReady
-            ? 'Nome valido. Voce pode iniciar.'
-            : 'Use 5-20 caracteres: apenas letras, numeros e underscore.'}
+            ? "Nome valido. Voce pode iniciar."
+            : "Use 5-20 caracteres: apenas letras, numeros e underscore."}
         </small>
       </section>
 
@@ -109,7 +121,11 @@ function Game() {
       </section>
 
       <div className="game-actions">
-        <button type="button" onClick={handleStart} disabled={status === 'running' || !isReady}>
+        <button
+          type="button"
+          onClick={handleStart}
+          disabled={status === "running" || !isReady}
+        >
           {actionLabel}
         </button>
       </div>
@@ -139,7 +155,7 @@ function Game() {
         )}
       </section>
     </main>
-  )
+  );
 }
 
-export default Game
+export default Game;

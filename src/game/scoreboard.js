@@ -40,10 +40,30 @@ function sortEntries(entries) {
   })
 }
 
+function mergeEntriesByBestScore(entries) {
+  const bestByName = new Map()
+
+  entries.forEach((entry) => {
+    const currentBest = bestByName.get(entry.name)
+
+    if (!currentBest || entry.score > currentBest.score) {
+      bestByName.set(entry.name, entry)
+      return
+    }
+
+    if (entry.score === currentBest.score && entry.date < currentBest.date) {
+      bestByName.set(entry.name, entry)
+    }
+  })
+
+  return [...bestByName.values()]
+}
+
 function normalizeScoreboard(scoreboard) {
-  const entries = Array.isArray(scoreboard?.entries)
+  const rawEntries = Array.isArray(scoreboard?.entries)
     ? scoreboard.entries.map(normalizeEntry).filter(Boolean)
     : []
+  const entries = mergeEntriesByBestScore(rawEntries)
 
   return {
     version: SCOREBOARD_VERSION,
@@ -92,17 +112,36 @@ export function addEntry({ name, score }) {
   }
 
   const scoreboard = loadScoreboard()
+  const safeName = sanitizeName(name)
+  const safeScore = Math.max(0, Math.floor(Number(score) || 0))
+  const existingEntry = scoreboard.entries.find((entry) => entry.name === safeName)
+
+  if (existingEntry && safeScore <= existingEntry.score) {
+    return scoreboard
+  }
+
+  const nextEntries = existingEntry
+    ? scoreboard.entries.map((entry) =>
+        entry.name === safeName
+          ? {
+              ...entry,
+              score: safeScore,
+              date: new Date().toISOString(),
+            }
+          : entry,
+      )
+    : [
+        ...scoreboard.entries,
+        {
+          name: safeName,
+          score: safeScore,
+          date: new Date().toISOString(),
+        },
+      ]
 
   const nextScoreboard = normalizeScoreboard({
     ...scoreboard,
-    entries: [
-      ...scoreboard.entries,
-      {
-        name: sanitizeName(name),
-        score: Math.max(0, Math.floor(Number(score) || 0)),
-        date: new Date().toISOString(),
-      },
-    ],
+    entries: nextEntries,
   })
 
   saveScoreboard(nextScoreboard)
