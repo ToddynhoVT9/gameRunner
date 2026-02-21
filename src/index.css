@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Trebuchet MS', Verdana, sans-serif;
+  font-family: "Trebuchet MS", Verdana, sans-serif;
   line-height: 1.4;
   font-weight: 400;
   color: #1f2937;
@@ -110,7 +110,9 @@ body {
   font-weight: 700;
   padding: 10px 20px;
   cursor: pointer;
-  transition: transform 140ms ease, opacity 140ms ease;
+  transition:
+    transform 140ms ease,
+    opacity 140ms ease;
 }
 
 .game-actions button:hover:enabled {

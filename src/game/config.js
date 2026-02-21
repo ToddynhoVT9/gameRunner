@@ -7,7 +7,7 @@ export const GAME_CONFIG = {
   gameSpeed: 300,
   speedIncreasePerSecond: 8,
   spawnIntervalMin: 0.85,
-  spawnIntervalMax: 1.65,
+  spawnIntervalMax: 1.5,
   minObstacleGapBase: 180,
   minObstacleGapSpeedFactor: 0.22,
   maxDeltaTime: 0.05,
